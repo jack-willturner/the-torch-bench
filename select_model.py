@@ -6,10 +6,10 @@ from utils import save_model, load_model
 from models.ops import OP_REGISTRY
 from models.resnet import ResNet, BasicBlock, CIFARStem, ImageNetStem
 from models.workload_factory import resnet_configs, generate_random_config
-
+from proxy import NASWOT
 from gymnastics.datasets import get_data_loaders
-from gymnastics.proxies import get_proxy
 
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description="Torch bench")
 parser.add_argument(
@@ -44,7 +44,7 @@ elif args.dataset == "ImageNet":
 
 skeleton = resnet_configs["resnet18"]
 
-proxy = get_proxy("NASWOT")
+proxy = NASWOT()
 data_loader = get_data_loaders(
     args.dataset,
     args.path_to_data,
@@ -54,7 +54,7 @@ data_loader = get_data_loaders(
 configs = []
 scores = []
 
-for trial in range(args.num_trials):
+for trial in tqdm(range(args.num_trials)):
 
     config = generate_random_config(
         skeleton.channels, skeleton.blocks, skeleton.strides, OP_REGISTRY
