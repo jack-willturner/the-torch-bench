@@ -6,20 +6,23 @@ import numpy as np
 from typing import List, Dict, Tuple
 from dataclasses import dataclass
 
+
 @dataclass
 class ResNetConfig:
     channels: List[int]
     blocks: List[int]
     strides: List[int]
 
+
 resnet_configs = {
-    'resnet18': ResNetConfig([64,128,256,512], [2,2,2,2], [1,2,2,2]),
-    'resnet34': ResNetConfig([64,128,256,512], [3,4,6,3], [1,2,2,2]),
+    "resnet18": ResNetConfig([64, 128, 256, 512], [2, 2, 2, 2], [1, 2, 2, 2]),
+    "resnet34": ResNetConfig([64, 128, 256, 512], [3, 4, 6, 3], [1, 2, 2, 2]),
 }
+
 
 def generate_random_config(channels, blocks, strides, op_registry, image_size=64):
 
-    # configs is a list of lists of operations for each stage of the ResNet
+    # configs is a list of lists of operations for each stage of the ResNet
     # ResNets always have four stages
     # each stage has a variable number of layers (for instance, in ResNet18 they all have 2 layers)
     configs = []
@@ -28,7 +31,7 @@ def generate_random_config(channels, blocks, strides, op_registry, image_size=64
 
     for out_channels, block, stride in zip(channels, blocks, strides):
 
-        # in a ResNet18 we have [2,2,2,2] blocks (i.e. 2 blocks per stage)
+        # in a ResNet18 we have [2,2,2,2] blocks (i.e. 2 blocks per stage)
         # so in this case stage_config would be a list of 2 op configs
         stage_config = []
 
@@ -43,8 +46,10 @@ def generate_random_config(channels, blocks, strides, op_registry, image_size=64
             op_config["in_channels"] = in_channels
             op_config["out_channels"] = out_channels
 
-            # e.g. if group conv, generate random number of groups
-            extra_args = conv.generate_random_args(in_channels, out_channels, (image_size, image_size))
+            # e.g. if group conv, generate random number of groups
+            extra_args = conv.generate_random_args(
+                in_channels, out_channels, (image_size, image_size)
+            )
 
             op_config.update(extra_args)
             stage_config.append(op_config)
@@ -53,6 +58,6 @@ def generate_random_config(channels, blocks, strides, op_registry, image_size=64
 
         configs.append(stage_config)
 
-        image_size= image_size // 2
+        image_size = image_size // 2
 
     return configs

@@ -51,10 +51,14 @@ class Seq2(Op):
 
             # step 2: choose a grouping factor for the rest
             valid_number_of_groups = False
-            while(not valid_number_of_groups):
+            while not valid_number_of_groups:
 
-                groups = np.random.randint(1, min(remaining_in_channels, remaining_out_channels))
-                valid_number_of_groups = (remaining_in_channels % groups == 0) and (remaining_out_channels % groups == 0)
+                groups = np.random.randint(
+                    1, min(remaining_in_channels, remaining_out_channels)
+                )
+                valid_number_of_groups = (remaining_in_channels % groups == 0) and (
+                    remaining_out_channels % groups == 0
+                )
 
         else:
             groups = 1

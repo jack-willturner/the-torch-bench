@@ -44,9 +44,9 @@ class Seq3(Op):
     def generate_random_args(in_channels, out_channels, img_shape=None):
 
         assert img_shape is not None
-        split_factor = img_shape[0]+1
+        split_factor = img_shape[0] + 1
 
-        while (img_shape[0] % split_factor != 0):
+        while img_shape[0] % split_factor != 0:
             split_factor = np.random.randint(1, min(img_shape[0], img_shape[1]))
 
         return {"split_factor": split_factor, "inferred_image_shape": img_shape}

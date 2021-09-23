@@ -20,7 +20,7 @@ class GConv(Op):
             in_channels,
             out_channels,
             kernel_size,
-            groups=args['groups'],
+            groups=args["groups"],
             stride=stride,
             padding=padding,
         )
@@ -31,12 +31,16 @@ class GConv(Op):
     def get_flop_count(self) -> int:
         return super().get_flop_count()
 
-    def generate_random_args(in_channels, out_channels, img_shape=None) -> Dict[str, int]:
+    def generate_random_args(
+        in_channels, out_channels, img_shape=None
+    ) -> Dict[str, int]:
 
         valid_number_of_groups = False
 
-        while(not valid_number_of_groups):
+        while not valid_number_of_groups:
             groups = np.random.randint(1, min(in_channels, out_channels))
-            valid_number_of_groups = (in_channels % groups == 0) and (out_channels % groups == 0)
+            valid_number_of_groups = (in_channels % groups == 0) and (
+                out_channels % groups == 0
+            )
 
-        return {'groups': groups}
+        return {"groups": groups}

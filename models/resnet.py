@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 __all__ = ["ResNet18", "ResNet34"]
 
+
 class CIFARStem(nn.Module):
     def __init__(self, in_planes=3, planes=64):
         super(CIFARStem, self).__init__()
@@ -17,6 +18,7 @@ class CIFARStem(nn.Module):
 
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
+
 
 class ImageNetStem(nn.Module):
     def __init__(self, in_planes=3, planes=64):
@@ -28,6 +30,7 @@ class ImageNetStem(nn.Module):
 
     def forward(self, x):
         return self.pool(F.relu(self.bn(self.conv(x))))
+
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -96,18 +99,10 @@ class ResNet(nn.Module):
 
         self.stem = stem(3, self.in_planes)
 
-        self.layer1 = self._make_layer(
-            block, 64, num_blocks[0], configs[0]
-        )
-        self.layer2 = self._make_layer(
-            block, 128, num_blocks[1], configs[1]
-        )
-        self.layer3 = self._make_layer(
-            block, 256, num_blocks[2], configs[2]
-        )
-        self.layer4 = self._make_layer(
-            block, 512, num_blocks[3], configs[3]
-        )
+        self.layer1 = self._make_layer(block, 64, num_blocks[0], configs[0])
+        self.layer2 = self._make_layer(block, 128, num_blocks[1], configs[1])
+        self.layer3 = self._make_layer(block, 256, num_blocks[2], configs[2])
+        self.layer4 = self._make_layer(block, 512, num_blocks[3], configs[3])
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 

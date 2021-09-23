@@ -6,6 +6,7 @@ import numpy as np
 from .op import Op
 from typing import Union, Tuple, Dict
 
+
 class Seq1(Op):
     def __init__(
         self, in_channels, out_channels, kernel_size, stride, padding=1, args=None
@@ -31,16 +32,20 @@ class Seq1(Op):
         outs = [conv(x) for conv in self.convs]
         return torch.cat(outs, dim=1)
 
-    def generate_random_args(in_channels, out_channels, img_shape=None) -> Dict[str, int]:
+    def generate_random_args(
+        in_channels, out_channels, img_shape=None
+    ) -> Dict[str, int]:
 
         """
         Step 1: choose a split factor
         """
         valid_split_factor = False
 
-        while(not valid_split_factor):
+        while not valid_split_factor:
             split_factor = np.random.randint(1, min(in_channels, out_channels))
-            valid_split_factor = (in_channels % split_factor == 0) and (out_channels % split_factor == 0)
+            valid_split_factor = (in_channels % split_factor == 0) and (
+                out_channels % split_factor == 0
+            )
 
         """
         Step 2: associate grouping to each split
@@ -53,14 +58,15 @@ class Seq1(Op):
         for split in range(split_factor):
             valid_group_factor = False
 
-            while(not valid_group_factor):
+            while not valid_group_factor:
                 groups = np.random.randint(1, channels_per_split)
 
-                valid_group_factor = (channels_per_split % groups == 0)
+                valid_group_factor = channels_per_split % groups == 0
 
             groups_per_split.append(groups)
 
-        return {'split_factor': split_factor, "groups": groups_per_split}
+        return {"split_factor": split_factor, "groups": groups_per_split}
+
 
 """
 

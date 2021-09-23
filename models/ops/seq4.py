@@ -49,7 +49,7 @@ class Seq4(nn.Module):
         return torch.cat(outs, 1)
 
     def generate_random_args(
-        in_channels: int, out_channels: int, img_shape:Tuple[int, int]=None
+        in_channels: int, out_channels: int, img_shape: Tuple[int, int] = None
     ) -> Dict:
 
         # choose n_groups to be something divisble by both in and out_channels
