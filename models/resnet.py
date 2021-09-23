@@ -123,10 +123,19 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         out = self.stem(x)
-        out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = self.layer4(out)
+
+        for layer in self.layer1:
+            out = layer(out)
+
+        for layer in self.layer2:
+            out = layer(out)
+
+        for layer in self.layer3:
+            out = layer(out)
+
+        for layer in self.layer4:
+            out = layer(out)
+
         out = self.avgpool(out)
         out = out.view(out.size(0), -1)
         out = self.linear(out)

@@ -32,6 +32,7 @@ class Seq4(nn.Module):
             )
 
     def forward(self, x):
+
         outs = []
         for i, conv in enumerate(self.convs):
             outs.append(
@@ -64,6 +65,6 @@ class Seq4(nn.Module):
         kernel_sizes: List[int] = []
 
         for _ in range(groups):
-            kernel_sizes.append(np.random.choice([3, 5, 7, 11]))
+            kernel_sizes.append(np.random.choice([1, 3, 5, 7, 11]))
 
         return {"groups": groups, "kernel_sizes": kernel_sizes}

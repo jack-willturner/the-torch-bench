@@ -17,7 +17,7 @@ resnet_configs = {
     'resnet34': ResNetConfig([64,128,256,512], [3,4,6,3], [1,2,2,2]),
 }
 
-def generate_random_config(channels, blocks, strides, op_registry):
+def generate_random_config(channels, blocks, strides, op_registry, image_size=64):
 
     # configs is a list of lists of operations for each stage of the ResNet
     # ResNets always have four stages
@@ -44,7 +44,7 @@ def generate_random_config(channels, blocks, strides, op_registry):
             op_config["out_channels"] = out_channels
 
             # e.g. if group conv, generate random number of groups
-            extra_args = conv.generate_random_args(in_channels, out_channels)
+            extra_args = conv.generate_random_args(in_channels, out_channels, (image_size, image_size))
 
             op_config.update(extra_args)
             stage_config.append(op_config)
@@ -52,5 +52,7 @@ def generate_random_config(channels, blocks, strides, op_registry):
             in_channels = out_channels
 
         configs.append(stage_config)
+
+        image_size= image_size // 2
 
     return configs

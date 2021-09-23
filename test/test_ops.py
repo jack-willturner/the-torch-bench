@@ -7,7 +7,6 @@ from models.resnet import ResNet, BasicBlock, CIFARStem, ImageNetStem
 def test_ops():
 
     for op in OP_REGISTRY:
-        print(op)
         skeleton = resnet_configs['resnet18']
         config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides, [op])
 
