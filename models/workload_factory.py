@@ -5,7 +5,6 @@ import numpy as np
 
 from typing import List, Dict, Tuple
 from dataclasses import dataclass
-from .ops import OP_REGISTRY
 
 @dataclass
 class ResNetConfig:
@@ -18,7 +17,7 @@ resnet_configs = {
     'resnet34': ResNetConfig([64,128,256,512], [3,4,6,3], [1,2,2,2]),
 }
 
-def generate_random_config(channels, blocks, strides):
+def generate_random_config(channels, blocks, strides, op_registry):
 
     # configs is a list of lists of operations for each stage of the ResNet
     # ResNets always have four stages
@@ -36,7 +35,7 @@ def generate_random_config(channels, blocks, strides):
         for i, layer in enumerate(range(block)):
             op_config = {}
 
-            conv = np.random.choice(OP_REGISTRY)
+            conv = np.random.choice(op_registry)
 
             op_config["conv"] = conv
             op_config["stride"] = stride if i == 0 else 1

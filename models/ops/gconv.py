@@ -31,7 +31,7 @@ class GConv(Op):
     def get_flop_count(self) -> int:
         return super().get_flop_count()
 
-    def generate_random_args(in_channels, out_channels) -> Dict[str, int]:
+    def generate_random_args(in_channels, out_channels, img_shape=None) -> Dict[str, int]:
 
         valid_number_of_groups = False
 

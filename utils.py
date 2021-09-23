@@ -1,5 +1,5 @@
 import torch
-from workloads import get_model
+from models import get_model
 
 def save_model(model, filename, save_weights=False):
     torch.save({

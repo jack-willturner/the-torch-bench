@@ -29,5 +29,5 @@ class Conv(Op):
     def get_flop_count(self) -> int:
         return super().get_flop_count()
 
-    def generate_random_args(in_channels, out_channels):
+    def generate_random_args(in_channels, out_channels, img_shape=None):
         return {}

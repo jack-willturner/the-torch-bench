@@ -1,13 +1,13 @@
 import torch
 
 from utils import save_model, load_model
-
-from workloads.resnet import ResNet, BasicBlock, CIFARStem, ImageNetStem
-from workloads.workload_factory import resnet_configs, generate_random_config
+from models.ops import OP_REGISTRY
+from models.resnet import ResNet, BasicBlock, CIFARStem, ImageNetStem
+from models.workload_factory import resnet_configs, generate_random_config
 
 def test_resnet_cifar10():
     skeleton = resnet_configs['resnet18']
-    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides)
+    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides, OP_REGISTRY)
 
     net = ResNet(BasicBlock, skeleton.blocks, config, num_classes=10, stem=CIFARStem)
     data = torch.rand((1,3,32,32))
@@ -18,7 +18,7 @@ def test_resnet_cifar10():
 
 def test_resnet_cifar100():
     skeleton = resnet_configs['resnet18']
-    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides)
+    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides, OP_REGISTRY)
 
     net = ResNet(BasicBlock, skeleton.blocks, config, num_classes=100, stem=CIFARStem)
     data = torch.rand((1,3,32,32))
@@ -29,7 +29,7 @@ def test_resnet_cifar100():
 
 def test_resnet_imagenet():
     skeleton = resnet_configs['resnet18']
-    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides)
+    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides, OP_REGISTRY)
 
     net = ResNet(BasicBlock, skeleton.blocks, config, num_classes=1000, stem=ImageNetStem)
     data = torch.rand((1,3,224,224))
@@ -41,7 +41,7 @@ def test_resnet_imagenet():
 
 def test_save_and_load():
     skeleton = resnet_configs['resnet18']
-    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides)
+    config = generate_random_config(skeleton.channels, skeleton.blocks, skeleton.strides, OP_REGISTRY)
 
     net = ResNet(BasicBlock, skeleton.blocks, config, num_classes=10, stem=CIFARStem)
     data = torch.rand((1,3,32,32))
