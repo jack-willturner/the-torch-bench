@@ -13,7 +13,7 @@ def save_model(model, filename, save_weights=False):
             "num_classes": model.num_classes,
             "stem": model.stem_type,
         },
-        filename,
+        filename + ".t7",
     )
 
 

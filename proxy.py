@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 
-class NASWOT():
+class NASWOT:
     def add_hooks(self, model) -> None:
         def counting_forward_hook(module, input, output):
             try:
@@ -24,8 +24,8 @@ class NASWOT():
                 K = x @ x.t()  # xs that are 1 and the same
                 K2 = (1.0 - x) @ (1.0 - x.t())  # xs that are 0 and the same
 
-                #K = K.to(device)
-                #K2 = K2.to(device)
+                # K = K.to(device)
+                # K2 = K2.to(device)
 
                 model.K = model.K + K.cpu() + K2.cpu()
             except Exception as e:
@@ -40,18 +40,18 @@ class NASWOT():
                 module.register_backward_hook(counting_backward_hook)
 
     def get_K(self, model, minibatch) -> torch.Tensor:
-        #device = minibatch.get_device()
+        # device = minibatch.get_device()
         batch_size = minibatch.size()[0]
 
         model.K = torch.zeros((batch_size, batch_size))
 
         self.add_hooks(model)
 
-        #model = model.to(device)
+        # model = model.to(device)
 
         # make a clone of the minibatch
         minibatch2 = torch.clone(minibatch)
-        #minibatch2 = minibatch2.to(device)
+        # minibatch2 = minibatch2.to(device)
 
         # attach the forward/backward hooks
         model.zero_grad()

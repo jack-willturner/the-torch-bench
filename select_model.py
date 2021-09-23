@@ -74,4 +74,8 @@ for trial in tqdm(range(args.num_trials)):
 best_config = configs[np.argmax(scores)]
 net = ResNet(BasicBlock, skeleton.blocks, config, num_classes=num_classes, stem=stem)
 
-save_model(net, "configs/best_model.t7")
+save_model(net, "configs/best_model")
+
+from pprint import pprint
+
+pprint(best_config)
