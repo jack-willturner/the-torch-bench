@@ -1,9 +1,6 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
 
-from typing import List, Dict, Tuple
+from typing import List
 from dataclasses import dataclass
 
 
@@ -18,6 +15,26 @@ resnet_configs = {
     "resnet18": ResNetConfig([64, 128, 256, 512], [2, 2, 2, 2], [1, 2, 2, 2]),
     "resnet34": ResNetConfig([64, 128, 256, 512], [3, 4, 6, 3], [1, 2, 2, 2]),
 }
+
+
+def generate_layer_config(
+    in_channels, out_channels, op, stride, precomputed_op_configs=None
+):
+
+    op_config = {}
+
+    op_config["conv"] = op
+    op_config["stride"] = stride
+
+    op_config["in_channels"] = in_channels
+    op_config["out_channels"] = out_channels
+
+    # e.g. if group conv, generate random number of groups
+    extra_args = op.generate_random_args(in_channels, out_channels)
+
+    op_config.update(extra_args)
+
+    return op_config
 
 
 def generate_random_config(channels, blocks, strides, op_registry, image_size=64):
@@ -35,25 +52,14 @@ def generate_random_config(channels, blocks, strides, op_registry, image_size=64
         # so in this case stage_config would be a list of 2 op configs
         stage_config = []
 
-        for i, layer in enumerate(range(block)):
-            op_config = {}
+        for i, _ in enumerate(range(block)):
 
             conv = np.random.choice(op_registry)
-
-            op_config["conv"] = conv
-            op_config["stride"] = stride if i == 0 else 1
-
-            op_config["in_channels"] = in_channels
-            op_config["out_channels"] = out_channels
-
-            # e.g. if group conv, generate random number of groups
-            extra_args = conv.generate_random_args(
-                in_channels, out_channels, (image_size, image_size)
+            op_config = generate_layer_config(
+                in_channels, out_channels, conv, stride if i == 0 else 1
             )
 
-            op_config.update(extra_args)
             stage_config.append(op_config)
-
             in_channels = out_channels
 
         configs.append(stage_config)

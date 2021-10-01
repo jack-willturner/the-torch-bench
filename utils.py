@@ -18,7 +18,8 @@ def save_model(model, filename, save_weights=False):
 
 
 def load_model(checkpoint):
-    ckpt = torch.load(checkpoint)
+
+    ckpt = torch.load(checkpoint + ".t7")
 
     ## get the model base class
     model_class = get_model(ckpt["model_class"])
